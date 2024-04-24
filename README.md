@@ -3,7 +3,8 @@
 As supplemental to manuscript Wunder, L. et al. 2024: Manganese reduction in microbial communities involved in Antarctic surface sediments from Potter Cove (submitted)
 
 ## Amplicon sequence data analysis - workflow
-Involves all scripts starting with `S_` and some scripts which are sourced during this analysis in folder [Scripts to source](Scripts_to_source)
+Involves all scripts starting with `S_` and some scripts which are sourced during this analysis in folder [Scripts to source](Scripts_to_source). \
+The workflow is based on the pipeline by [C. Hassenrueck](http://doi.io-warnemuende.de/10.12754/misc-2022-0002) following the [dada2 pipeline](https://benjjneb.github.io/dada2/index.html).
 
 
 Two datasets were analysed: 
