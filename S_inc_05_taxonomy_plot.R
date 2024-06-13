@@ -304,7 +304,7 @@ ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.emf", plot = MS_supl_plot_DNA, width
 
 
 
-# plot MS Fig 3 ####
+# plot MS Fig 3 (is really Fig 4 in the end) ####
 ## lineplot, only Mn + acetate, acetate treatment
  # Desulfuromusa, Desulfuromonas, Sva1033, uncl. Arcobacteraceae
 
@@ -358,6 +358,7 @@ fig03_base <- ggplot(ta5s_MSFig03_wmean, aes(x = Timepoint, color = Substrate, l
   theme_bw(base_line_size = 1, base_rect_size = 1) +
   theme(text = element_text(size = 9, color = "black"), 
         axis.title =  element_text(size = 9),
+        axis.title.y = element_text(margin = margin(l = 3)),
         axis.text = element_text(size = 9, color = "black"),
         legend.text = element_text(size = 9), legend.title = element_text(size = 9),
         axis.ticks = element_line(linewidth = 0.5),
@@ -368,35 +369,66 @@ fig03_base <- ggplot(ta5s_MSFig03_wmean, aes(x = Timepoint, color = Substrate, l
         legend.key.width = unit(0.8, "cm"))
 
 # subset plots for different scales
-fig3_desulfu <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromusa)") +
+fig3_desulfu_d <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromusa)" &
+                                          ta5s_MSFig03_wmean$NucleicAcid == "DNA") +
   scale_y_continuous(expand = c(0,0), limits = c(-0.1,17), breaks = c(0,5,10,15)) +
-  theme(strip.text.y = element_blank())
+  theme(strip.text.y = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-fig3_sva <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "Sva1033") +
+fig3_sva_d <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "Sva1033" &
+                                      ta5s_MSFig03_wmean$NucleicAcid == "DNA") +
   scale_y_continuous(expand = c(0,0), limits = c(-0.1,17), breaks = c(0,5,10,15)) +
-  theme(strip.text.y = element_blank(), axis.title.y = element_blank())
+  theme(strip.text.y = element_blank(), axis.title.y = element_blank(),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-fig3_desulfo <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromonas)") +
+fig3_desulfo_d <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromonas)" &
+                                          ta5s_MSFig03_wmean$NucleicAcid == "DNA") +
   scale_y_continuous(expand = c(0,0), limits = c(-0.38,63)) +
-  theme(strip.text.y = element_blank(), axis.title.y = element_blank())
+  theme(strip.text.y = element_blank(), axis.title.y = element_blank(),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-fig3_arco <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Arcobacteraceae)") +
+fig3_arco_d <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Arcobacteraceae)" &
+                                       ta5s_MSFig03_wmean$NucleicAcid == "DNA") +
   scale_y_continuous(expand = c(0,0), limits = c(-0.38,63)) +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank(),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+
+fig3_desulfu_r <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromusa)" &
+                                          ta5s_MSFig03_wmean$NucleicAcid == "RNA") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.1,17), breaks = c(0,5,10,15)) +
+  theme(strip.text.y = element_blank(), strip.text.x = element_blank())
+
+fig3_sva_r <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "Sva1033" &
+                                      ta5s_MSFig03_wmean$NucleicAcid == "RNA") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.1,17), breaks = c(0,5,10,15)) +
+  theme(strip.text.y = element_blank(), axis.title.y = element_blank(), strip.text.x = element_blank())
+
+fig3_desulfo_r <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromonas)" &
+                                          ta5s_MSFig03_wmean$NucleicAcid == "RNA") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.38,63)) +
+  theme(strip.text.y = element_blank(), axis.title.y = element_blank(), strip.text.x = element_blank())
+
+fig3_arco_r <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Arcobacteraceae)" &
+                                       ta5s_MSFig03_wmean$NucleicAcid == "RNA") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.38,63)) +
+  theme(axis.title.y = element_blank(), strip.text.x = element_blank())
+
 
 
 # combine plots
-plot_Fig03 <- fig3_desulfu + fig3_sva + fig3_desulfo + fig3_arco +
-  plot_layout(nrow = 1, guides = "collect", axis_titles = "collect") &
+fig3_axis <- fig3_desulfu_d + fig3_sva_d + fig3_desulfo_d + fig3_arco_d + 
+  fig3_desulfu_r + fig3_sva_r + fig3_desulfo_r + fig3_arco_r +
+  plot_annotation(tag_levels = "A") +
+  plot_layout(nrow = 2, guides = "collect", axis_titles = "collect_x") &
   theme(legend.position = "bottom", legend.box.margin = margin(t = -5),
         legend.key.width = unit(0.8, "cm"),
         legend.box = "vertical", 
         legend.margin = margin(t = -0.5))
-plot_Fig03
+fig3_axis
 
-ggsave("plots/MS_Fig03_Inc_tax_new.jpg", plot_Fig03, width = 180, height = 105, units = "mm")
-ggsave("plots/MS_Fig03_Inc_tax_new.pdf", plot_Fig03, width = 180, height = 105, units = "mm")
-ggsave("plots/MS_Fig03_Inc_tax_new.emf", plot_Fig03, width = 180, height = 105, units = "mm", 
+ggsave("plots/MS_Fig03_Inc_tax_axis.jpg", fig3_axis, width = 180, height = 108, units = "mm", dpi = 600)
+ggsave("plots/MS_Fig03_Inc_tax_axis.pdf", fig3_axis, width = 180, height = 108, units = "mm")
+ggsave("plots/MS_Fig03_Inc_tax_axis.emf", fig3_axis, width = 180, height = 108, units = "mm",
        device = {function(filename, ...) devEMF::emf(file = filename, ...)})
 
 
