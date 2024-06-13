@@ -121,7 +121,7 @@ range_maxEE <- matrix(
 
 # add to list according parameters for testing truncation length and maxEE
 # check quality profile pdfs for this:
-### seq lane 1/1 HKMLNDRXY_L1
+### seq lane 1/3 HKMLNDRXY_L1
   ## forward (R1)
   # also drops at beginning of read, 
   # substantial bad peaks, cut as short as possible
@@ -137,6 +137,30 @@ sample.paths[['HKMLNDRXY_L1']][['range_truncLen']] <- matrix(
       90, 200),
   nrow = 5, ncol = 2, byrow = T)
 sample.paths[['HKMLNDRXY_L1']][['range_maxEE']] <- range_maxEE
+
+### seq lane 2/3 H7H5VDRX5_L1
+## forward (R1)
+# in general good quality
+# some bad peaks at 145 and ~180 bp
+# potential cut-off: 145 or 175-180 or 200
+## reverse (R2)
+# looks very similar to R1 with bad peaks at same positions
+# a bit better quality, especially in fr
+range_truncLen <- matrix(
+  c(145, 145, # first number for R1 read (= forward), second number for R2 read (=reverse)
+    115, 175,
+    120, 170,
+    110, 180,
+    130, 160),
+  nrow = 5, ncol = 2, byrow = T)
+sample.paths[['H7H5VDRX5_L1']][['range_truncLen']] <- range_truncLen
+sample.paths[['H7H5VDRX5_L1']][['range_maxEE']] <- range_maxEE
+
+
+### seq lane 3/3 H7JJGDRX5_L1
+# quality looks very similar to other lane, use same parameters
+sample.paths[['H7JJGDRX5_L1']][['range_truncLen']] <- range_truncLen
+sample.paths[['H7JJGDRX5_L1']][['range_maxEE']] <- range_maxEE
 
 
 # Prepare directories to place filtered files in Filtered_TARGET/ subdirectory in folder seq_by_flowcell individual flowcell folders
@@ -228,13 +252,29 @@ sample.paths[['flowcell']][['screen_filt_settings_rf']]
 
 # define optimal trunc length, these parameters will be needed again further down
 
-# seq lane HKMLNDRXY_L1 ##
+# seq lane 1/3 HKMLNDRXY_L1 ##
  # truncLen = c(120,170), maxEE = c(2,2);
  # index 13, fr: prop.total 0.9703; q10 0.9665; q90 0.9763; rf: prop.total 0.9576; q10 0.9534; q90 0.9646;
 sample.paths[['HKMLNDRXY_L1']][['truncLen_R1']] <- 120
 sample.paths[['HKMLNDRXY_L1']][['truncLen_R2']] <- 170
 sample.paths[['HKMLNDRXY_L1']][['error_R1']] <- 2
 sample.paths[['HKMLNDRXY_L1']][['error_R2']] <- 2
+
+# seq lane 2/3 H7H5VDRX5_L1 ##
+# truncLen = c(110,180), maxEE = c(2,2);
+# index 18, fr: prop.total 0.9828; q10 0.9801; q90 0.9858; rf: prop.total 0.9789; q10 0.9763; q90 0.9825;
+sample.paths[['H7H5VDRX5_L1']][['truncLen_R1']] <- 110
+sample.paths[['H7H5VDRX5_L1']][['truncLen_R2']] <- 180
+sample.paths[['H7H5VDRX5_L1']][['error_R1']] <- 2
+sample.paths[['H7H5VDRX5_L1']][['error_R2']] <- 2
+
+# seq lane 3/3 H7JJGDRX5_L1 ##
+# truncLen = c(110,180), maxEE = c(2,2);
+# index 18, fr: prop.total 0.9725; q10 0.9700; q90 0.9765; rf: prop.total 0.9683; q10 0.9651; q90 0.9717;
+sample.paths[['H7JJGDRX5_L1']][['truncLen_R1']] <- 110
+sample.paths[['H7JJGDRX5_L1']][['truncLen_R2']] <- 180
+sample.paths[['H7JJGDRX5_L1']][['error_R1']] <- 2
+sample.paths[['H7JJGDRX5_L1']][['error_R2']] <- 2
 
 
 # run trimming
@@ -331,12 +371,15 @@ x = sample.paths, i = names(sample.paths),
 SIMPLIFY = F
 )
 
-# all samples reached convergense after 7-8 rounds
+# all samples reached convergence after 7-9 rounds
 
 
 # plot error profiles
-## do plots manually
+## do plots manually line 383-392 for the individual lanes
 x <- "HKMLNDRXY_L1"
+x <- "H7H5VDRX5_L1"
+x <- "H7JJGDRX5_L1"
+
 pdf(paste0("ErrorProfiles/", x, "_ErrorProfiles_separate.pdf"))
 barplot(log10(dada2:::checkConvergence(sample.paths[[x]][['errFR_R1']]) + 1), main = "Convergence_fwd")
 barplot(log10(dada2:::checkConvergence(sample.paths[[x]][['errFR_R2']]) + 1), main = "Convergence_rev")
@@ -527,9 +570,34 @@ x = sample.paths, i = names(sample.paths),
 SIMPLIFY = F
 )
 
-# Merge sequence tables fr and reverse rf sequences, as it is only seq lane here only in one table
-seqtab <- mergeSequenceTables(sample.paths[['HKMLNDRXY_L1']][['seqtab_FR']], sample.paths[['HKMLNDRXY_L1']][['seqtab_RF_rc']] ,repeats = "sum")
+# Merge sequence tables fr and reverse rf sequences in new list
+seq.tables <-  mapply(function(x, i) {
+  x[['seqtab']] <- mergeSequenceTables(
+    x[['seqtab_FR']],
+    x[['seqtab_RF_rc']],
+    repeats = "sum" # samples with the same name (so sequence) will be summed together
+  )
+  # will give this message if samples are summed:
+  # Duplicated sample names detected in the sequence table row names.
+  #x
+}, 
+x = sample.paths, i = names(sample.paths),
+SIMPLIFY = F
+)
+
+
+# look at dimensions of all sequence tables
+mapply(function(x, i) {
+  dim(x)
+}, 
+x = seq.tables, i = names(seq.tables),
+SIMPLIFY = F
+)
+
+# merge sequence tables of different lanes
+seqtab <- mergeSequenceTables(tables = seq.tables, repeats = "sum")
 dim(seqtab)
+
 
 
 # Remove chimeras ####

@@ -1,29 +1,81 @@
-Name.Mapping.File	Target	Incubation	Replicate	Timepoint	Substrate	NucleicAcid	totReads	totASVs
-DNA-d0-9A	Bacteria	9	A	0	DIC	DNA	24061	2672
-DNA-d0-9B	Bacteria	9	B	0	DIC	DNA	19648	2402
-DNA-d20-7A	Bacteria	7	A	20	birnessite.acetate	DNA	30901	2702
-DNA-d20-7B	Bacteria	7	B	20	birnessite.acetate	DNA	54702	3364
-DNA-d20-7C	Bacteria	7	C	20	birnessite.acetate	DNA	30422	2747
-DNA-d20-8A	Bacteria	8	A	20	acetate	DNA	37714	2636
-DNA-d20-8B	Bacteria	8	B	20	acetate	DNA	21616	2283
-DNA-d20-8C	Bacteria	8	C	20	acetate	DNA	32834	2721
-RNA-d0-9A	Bacteria	9	A	0	DIC	RNA	15547	1917
-RNA-d0-9B	Bacteria	9	B	0	DIC	RNA	20020	2222
-RNA-d6-7A	Bacteria	7	A	6	birnessite.acetate	RNA	25759	2408
-RNA-d6-7B	Bacteria	7	B	6	birnessite.acetate	RNA	21144	1840
-RNA-d6-7C	Bacteria	7	C	6	birnessite.acetate	RNA	21934	1689
-RNA-d6-8A	Bacteria	8	A	6	acetate	RNA	11220	1658
-RNA-d6-8B	Bacteria	8	B	6	acetate	RNA	32003	2278
-RNA-d6-8C	Bacteria	8	C	6	acetate	RNA	23366	2090
-RNA-d10-7A	Bacteria	7	A	10	birnessite.acetate	RNA	14159	1383
-RNA-d10-7B	Bacteria	7	B	10	birnessite.acetate	RNA	23313	1817
-RNA-d10-7C	Bacteria	7	C	10	birnessite.acetate	RNA	22268	1696
-RNA-d10-8A	Bacteria	8	A	10	acetate	RNA	22302	1742
-RNA-d10-8B	Bacteria	8	B	10	acetate	RNA	13730	1675
-RNA-d10-8C	Bacteria	8	C	10	acetate	RNA	16915	1350
-RNA-d20-7A	Bacteria	7	A	20	birnessite.acetate	RNA	13747	1400
-RNA-d20-7B	Bacteria	7	B	20	birnessite.acetate	RNA	8624	1142
-RNA-d20-7C	Bacteria	7	C	20	birnessite.acetate	RNA	20007	1603
-RNA-d20-8A	Bacteria	8	A	20	acetate	RNA	15631	1271
-RNA-d20-8B	Bacteria	8	B	20	acetate	RNA	13254	1226
-RNA-d20-8C	Bacteria	8	C	20	acetate	RNA	15342	1277
+Name.Mapping.File	Target	Incubation	Replicate	Timepoint	Substrate	NucleicAcid	Year	totReads	totASVs
+DNA-d0-9A	Bacteria	9	A	0	DIC	DNA	2021	24062	2751
+DNA-d0-9B	Bacteria	9	B	0	DIC	DNA	2021	19640	2463
+DNA-d20-7A	Bacteria	7	A	20	birnessite.acetate	DNA	2021	30876	2816
+DNA-d20-7B	Bacteria	7	B	20	birnessite.acetate	DNA	2021	54673	3546
+DNA-d20-7C	Bacteria	7	C	20	birnessite.acetate	DNA	2021	30433	2846
+DNA-d20-8A	Bacteria	8	A	20	acetate	DNA	2021	37718	2733
+DNA-d20-8B	Bacteria	8	B	20	acetate	DNA	2021	21606	2341
+DNA-d20-8C	Bacteria	8	C	20	acetate	DNA	2021	32856	2811
+DNA-d20-9A	Bacteria	9	A	20	DIC	DNA	2021	19392	2158
+RNA-d0-9A	Bacteria	9	A	0	DIC	RNA	2021	15592	1963
+RNA-d0-9B	Bacteria	9	B	0	DIC	RNA	2021	20077	2289
+RNA-d6-7A	Bacteria	7	A	6	birnessite.acetate	RNA	2021	25847	2511
+RNA-d6-7B	Bacteria	7	B	6	birnessite.acetate	RNA	2021	21146	1874
+RNA-d6-7C	Bacteria	7	C	6	birnessite.acetate	RNA	2021	21927	1715
+RNA-d6-8A	Bacteria	8	A	6	acetate	RNA	2021	11252	1695
+RNA-d6-8B	Bacteria	8	B	6	acetate	RNA	2021	32022	2342
+RNA-d6-8C	Bacteria	8	C	6	acetate	RNA	2021	23404	2145
+RNA-d6-9A	Bacteria	9	A	6	DIC	RNA	2021	29162	2159
+RNA-d6-9B	Bacteria	9	B	6	DIC	RNA	2021	21885	2024
+RNA-d10-7A	Bacteria	7	A	10	birnessite.acetate	RNA	2021	14154	1401
+RNA-d10-7B	Bacteria	7	B	10	birnessite.acetate	RNA	2021	23337	1857
+RNA-d10-7C	Bacteria	7	C	10	birnessite.acetate	RNA	2021	22276	1735
+RNA-d10-8A	Bacteria	8	A	10	acetate	RNA	2021	22328	1772
+RNA-d10-8B	Bacteria	8	B	10	acetate	RNA	2021	13747	1698
+RNA-d10-8C	Bacteria	8	C	10	acetate	RNA	2021	16945	1374
+RNA-d10-9A	Bacteria	9	A	10	DIC	RNA	2021	19159	2111
+RNA-d10-9B	Bacteria	9	B	10	DIC	RNA	2021	20436	2155
+RNA-d20-7A	Bacteria	7	A	20	birnessite.acetate	RNA	2021	13761	1421
+RNA-d20-7B	Bacteria	7	B	20	birnessite.acetate	RNA	2021	8636	1160
+RNA-d20-7C	Bacteria	7	C	20	birnessite.acetate	RNA	2021	20031	1636
+RNA-d20-8A	Bacteria	8	A	20	acetate	RNA	2021	15653	1297
+RNA-d20-8B	Bacteria	8	B	20	acetate	RNA	2021	13272	1243
+RNA-d20-8C	Bacteria	8	C	20	acetate	RNA	2021	15344	1292
+RNA-d20-9A	Bacteria	9	A	20	DIC	RNA	2021	14496	1292
+RNA.d0.10A.bac	Bacteria	10	A	0	birnessite	RNA	2023	137155	4420
+RNA.d0.10B.bac	Bacteria	10	B	0	birnessite	RNA	2023	212466	5143
+RNA.d0.10C.bac	Bacteria	10	C	0	birnessite	RNA	2023	73155	3914
+RNA.d6.10A.bac	Bacteria	10	A	6	birnessite	RNA	2023	8698	943
+RNA.d6.10B.bac	Bacteria	10	B	6	birnessite	RNA	2023	128763	3466
+RNA.d6.10C.bac	Bacteria	10	C	6	birnessite	RNA	2023	203968	3555
+RNA.d6.11.bac	Bacteria	11	C	6	DIC	RNA	2023	176718	4621
+RNA.d10.10A.bac	Bacteria	10	A	10	birnessite	RNA	2023	244772	3759
+RNA.d10.10B.bac	Bacteria	10	B	10	birnessite	RNA	2023	84379	2373
+RNA.d10.10C.bac	Bacteria	10	C	10	birnessite	RNA	2023	118182	2939
+RNA.d10.11.bac	Bacteria	11	C	10	DIC	RNA	2023	181747	4457
+RNA.d20.10A.bac	Bacteria	10	A	20	birnessite	RNA	2023	141362	2781
+RNA.d20.10B.bac	Bacteria	10	B	20	birnessite	RNA	2023	74075	1888
+RNA.d20.10C.bac	Bacteria	10	C	20	birnessite	RNA	2023	164143	2631
+RNA.d20.11.bac	Bacteria	11	C	20	DIC	RNA	2023	83024	3022
+DNA.d0.10A.bac	Bacteria	10	A	0	birnessite	DNA	2023	42101	3658
+DNA.d0.10B.bac	Bacteria	10	B	0	birnessite	DNA	2023	61965	4217
+DNA.d0.10C.bac	Bacteria	10	C	0	birnessite	DNA	2023	68531	3972
+DNA.d6.10A.bac	Bacteria	10	A	6	birnessite	DNA	2023	6831	1430
+DNA.d6.10B.bac	Bacteria	10	B	6	birnessite	DNA	2023	170930	5133
+DNA.d6.10C.bac	Bacteria	10	C	6	birnessite	DNA	2023	105524	4588
+DNA.d6.11.bac	Bacteria	11	C	6	DIC	DNA	2023	121015	4844
+DNA.d10.10A.bac	Bacteria	10	A	10	birnessite	DNA	2023	69754	3577
+DNA.d10.10B.bac	Bacteria	10	B	10	birnessite	DNA	2023	67090	3433
+DNA.d10.10C.bac	Bacteria	10	C	10	birnessite	DNA	2023	26007	2325
+DNA.d10.11.bac	Bacteria	11	C	10	DIC	DNA	2023	18700	2339
+DNA.d20.10A.bac	Bacteria	10	A	20	birnessite	DNA	2023	96518	3381
+DNA.d20.10B.bac	Bacteria	10	B	20	birnessite	DNA	2023	179336	4426
+DNA.d20.10C.bac	Bacteria	10	C	20	birnessite	DNA	2023	40840	2667
+DNA.d20.11.bac	Bacteria	11	C	20	DIC	DNA	2023	5560	1097
+DNA.d6.7A.bac	Bacteria	7	A	6	birnessite.acetate	DNA	2021	35323	3040
+DNA.d6.7B.bac	Bacteria	7	B	6	birnessite.acetate	DNA	2021	15703	2186
+DNA.d6.7C.bac	Bacteria	7	C	6	birnessite.acetate	DNA	2021	9100	1637
+DNA.d6.8A.bac	Bacteria	8	A	6	acetate	DNA	2021	5645	1195
+DNA.d6.8B.bac	Bacteria	8	B	6	acetate	DNA	2021	34489	3169
+DNA.d6.8C.bac	Bacteria	8	C	6	acetate	DNA	2021	63199	3609
+DNA.d6.9A.bac	Bacteria	9	A	6	DIC	DNA	2021	50583	3586
+DNA.d6.9B.bac	Bacteria	9	B	6	DIC	DNA	2021	83935	4036
+DNA.d10.7A.bac	Bacteria	7	A	10	birnessite.acetate	DNA	2021	58352	3904
+DNA.d10.7B.bac	Bacteria	7	B	10	birnessite.acetate	DNA	2021	118259	4910
+DNA.d10.7C.bac	Bacteria	7	C	10	birnessite.acetate	DNA	2021	16001	2137
+DNA.d10.8A.bac	Bacteria	8	A	10	acetate	DNA	2021	17296	2236
+DNA.d10.8B.bac	Bacteria	8	B	10	acetate	DNA	2021	9923	1818
+DNA.d10.8C.bac	Bacteria	8	C	10	acetate	DNA	2021	8932	1563
+DNA.d10.9A.bac	Bacteria	9	A	10	DIC	DNA	2021	11911	1877
+DNA.d10.9B.bac	Bacteria	9	B	10	DIC	DNA	2021	48234	3484

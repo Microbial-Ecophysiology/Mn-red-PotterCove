@@ -27,7 +27,7 @@ prj <- "PROJECT"
 load(paste0("taxmap_", prj, ".RData"))
 
 ## metadata
-mdata_all <- read_tsv("MDATAFILE.txt")
+mdata <- read_tsv("MDATAFILE.txt")
 
 
 # create phyloseq object ####
@@ -61,96 +61,45 @@ source(paste0(sloc, "filter_taxa_above_threshold.R"))
 
 ## taxa above 5% in at least one samples
 ta5 <- sort_abundant_taxa(table = phylo_melt, abundance_threshold = 5, Abundance = "Abundance")
-# 6 genera, 12 families, 9 orders, 7 classes, 6 phyla
+# 5 genera, 12 families, 9 orders, 10 classes, 9 phyla
 
 ## taxa above 2% in at least one samples
 # ta2 <- sort_abundant_taxa(table = phylo_melt, abundance_threshold = 2, Abundance = "Abundance")
-# 12 genera, 24 families, 18 orders, 16 classes, 12 phyla
+# 16 genera, 28 families, 23 orders, 19 classes, 15 phyla
 
 # use 5% threshold
 # rm(ta2, ta3, ta4)
 
 # sort and make nice names for taxa ####
 ## other columns needed as factor for plotting
-cols_factor <- c("Incubation", "Replicate", "Substrate", "NucleicAcid")
+cols_factor <- c("Incubation", "Replicate", "Substrate", "NucleicAcid", "Year")
 
 ## decide on rank level to plot: Genus and sorted by Class
-unique(ta5$ASV_table_taxa_abv_5_perc$Class_mod) # 13 taxa to sort by
-unique(ta5$ASV_table_taxa_abv_5_perc$Genus_mod) # 33 taxa to plot
+ta5_class <- c(unique(ta5$ASV_table_taxa_abv_5_perc$Class_mod)) # 19 taxa to sort by
+ta5_genus <- c(unique(ta5$ASV_table_taxa_abv_5_perc$Genus_mod)) # 40 taxa to plot
+### reordering phyla and class entries using function from https://github.com/mrdwab/SOfun
+source("H:/GitHub/PhD_other-code/moveMe.R")
+ta5_genus_reorder <- moveMe(ta5_genus, "other_c_Alphaproteobacteria_<5% after other_p_Planctomycetota_<5%")
+ta5_genus_renamed <- ta5_genus_reorder %>% 
+  gsub("other_p_Actinobacteriota_<5%", "p_Actinobacteriota", .) %>% 
+  gsub("other_o_Bacteroidales_<5%", "o_Bacteroidales", .) %>% 
+  gsub("other_f_Flavobacteriaceae_<5%", "f_Flavobacteriaceae", .) %>% 
+  gsub("other_f_Arcobacteraceae_<5%", "f_Arcobacteraceae", .) %>% 
+  gsub("other_f_Desulfobacteraceae_<5%", "f_Desulfobacteraceae", .) %>% 
+  gsub("other_f_Desulfobulbaceae_<5%", "f_Desulfobulbaceae", .) %>% 
+  gsub("other_f_Sva1033_<5%", "f_Sva1033", .) %>% 
+  gsub("other_c_Clostridia_<5%", "c_Clostridia", .) %>% 
+  gsub("other_o_MSBL9_<5%", "o_MSBL9", .) %>% 
+  gsub("other_f_Pirellulaceae_<5%", "f_Pirellulaceae", .) %>% 
+  gsub("other_c_Alphaproteobacteria_<5%", "c_Alphaproteobacteria", .) %>% 
+  gsub("other_f_Unknown Family_<5%", "Unknown_Family_Gammapr.", .) %>% 
+  gsub("other_p_Spirochaetota_<5%", "p_Spirochaetota", .) %>% 
+  gsub("other_p_Verrucomicrobiota_<5%", "p_Verrucomicrobiota", .)
 
-ta5n <- select(ta5$ASV_table_taxa_abv_5_perc, OTU, Sample, Class_mod, Genus_mod, Abundance, Incubation, Substrate, Replicate, Timepoint, NucleicAcid, Genus, Family, Class, Order, Phylum) %>% 
-  mutate(Class_mod=factor(Class_mod, levels = c("Bacteroidia", "other_p_Bacteroidota_<5%",
-                                                "Campylobacteria",
-                                                "Desulfobacteria", "Desulfobulbia", "Desulfuromonadia", "other_p_Desulfobacterota_<5%",
-                                                "Planctomycetes", "other_p_Planctomycetota_<5%",
-                                                "Gammaproteobacteria", "other_p_Proteobacteria_<5%",
-                                                "other_p_Verrucomicrobiota_<5%",
-                                                "other_Bacteria_<5%")),
-         
-         Genus_mod=factor(Genus_mod, levels = c("other_o_Bacteroidales_<5%", 
-                                                "other_f_Flavobacteriaceae_<5%", "other_o_Flavobacteriales_<5%",
-                                                "other_c_Bacteroidia_<5%", "other_p_Bacteroidota_<5%",
-                                                
-                                                
-                                                "other_f_Arcobacteraceae_<5%", "Sulfurimonas",
-                                                "other_o_Campylobacterales_<5%",
-                                                
-                                                
-                                                "other_f_Desulfobacteraceae_<5%",
-                                                "Desulfofrigus", "other_f_Desulfolunaceae_<5%",
-                                                "other_o_Desulfobacterales_<5%", "other_c_Desulfobacteria_<5%",
-                                                
-                                                "Desulforhopalus", "other_f_Desulfocapsaceae_<5%", 
-                                                "other_o_Desulfobulbales_<5%",
-                                                
-                                                "Desulfuromonas", "other_f_Desulfuromonadaceae_<5%",
-                                                "Desulfuromusa", "other_f_Geopsychrobacteraceae_<5%",
-                                                "other_f_Sva1033_<5%",
-                                                "other_o_Desulfuromonadales_<5%", "other_c_Desulfuromonadia_<5%",
-                                                
-                                                "other_p_Desulfobacterota_<5%",
-                                                
-                                                
-                                                "other_f_Pirellulaceae_<5%", "other_c_Planctomycetes_<5%", "other_p_Planctomycetota_<5%",
-                                                
-                                                "other_f_Unknown Family_<5%",
-                                                "Woeseia",
-                                                "other_c_Gammaproteobacteria_<5%", "other_p_Proteobacteria_<5%",
-                                                
-                                                "other_p_Verrucomicrobiota_<5%",
-                                                "other_Bacteria_<5%"),
-                          labels = c("o_Bacteroidales", 
-                                     "f_Flavobacteriaceae", "other_o_Flavobacteriales_<5%",
-                                     "other_c_Bacteroidia_<5%", "other_p_Bacteroidota_<5%",
-                                     
-                                     
-                                     "f_Arcobacteraceae", "Sulfurimonas",
-                                     "other_o_Campylobacterales_<5%",
-                                     
-                                     
-                                     "f_Desulfobacteraceae",
-                                     "Desulfofrigus", "other_f_Desulfolunaceae_<5%",
-                                     "other_o_Desulfobacterales_<5%", "other_c_Desulfobacteria_<5%",
-                                     
-                                     "Desulforhopalus", "other_f_Desulfocapsaceae_<5%", 
-                                     "other_o_Desulfobulbales_<5%",
-                                     
-                                     "Desulfuromonas", "other_f_Desulfuromonadaceae_<5%",
-                                     "Desulfuromusa", "other_f_Geopsychrobacteraceae_<5%",
-                                     "f_Sva1033",
-                                     "other_o_Desulfuromonadales_<5%", "other_c_Desulfuromonadia_<5%",
-                                     
-                                     "other_p_Desulfobacterota_<5%",
-                                     
-                                     
-                                     "f_Pirellulaceae", "other_c_Planctomycetes_<5%", "other_p_Planctomycetota_<5%",
-                                     
-                                     "Unknown_Family_Gammapr.",
-                                     "Woeseia",
-                                     "other_c_Gammaproteobacteria_<5%", "other_p_Proteobacteria_<5%",
-                                     
-                                     "p_Verrucomicrobiota_<5%",
-                                     "other_Bacteria_<5%")),
+
+ta5n <- select(ta5$ASV_table_taxa_abv_5_perc, OTU, Sample, Class_mod, Genus_mod, Abundance, Incubation, Substrate, Replicate, Timepoint, NucleicAcid, Year, Genus, Family, Class, Order, Phylum) %>% 
+  mutate(Class_mod=factor(Class_mod, levels = ta5_class),
+         Genus_mod=factor(Genus_mod, levels = ta5_genus_reorder, labels = ta5_genus_renamed),
          ASV.taxa = factor(paste0(OTU, "\n", Genus)),  # new column with ASV ID and genus name
          across(all_of(cols_factor), as.factor)) %>%   # reorder families so families of same phylum are together
   group_by(Genus_mod)
@@ -160,7 +109,7 @@ ta5n <- select(ta5$ASV_table_taxa_abv_5_perc, OTU, Sample, Class_mod, Genus_mod,
 ## need to decide which rank to plot and to group by which other rank
  # here plot genus, group by class
 ta5s <- ta5n %>% 
-  group_by(Sample, Class_mod, Genus_mod, Incubation, Substrate, Replicate, Timepoint, NucleicAcid) %>% 
+  group_by(Sample, Class_mod, Genus_mod, Incubation, Substrate, Replicate, Timepoint, NucleicAcid, Year) %>% 
   summarise(Abundance = sum(Abundance), .groups = "keep") %>% 
   ungroup()
 
@@ -250,20 +199,30 @@ plot_birnessite.acetate <- plot_basic %+% subset(ta5s_R, ta5s_R$Substrate == "bi
 plot_acetate <- plot_basic %+% subset(ta5s_R, ta5s_R$Substrate == "acetate") +
   labs(title = "Acetate")
 
+plot_dic <- plot_basic %+% subset(ta5s_R, ta5s_R$Substrate == "DIC" & ta5s_R$Timepoint != 0) +
+  labs(title = "DIC (A+B: 2021; C: 2023)")
+
+plot_birnessite <- plot_basic %+% subset(ta5s_R, ta5s_R$Substrate == "birnessite" & ta5s_R$Timepoint != 0) +
+  labs(title = "Birnessite + DIC")
+
 plot_day0 <- plot_basic %+% subset(ta5s_R, ta5s_R$Timepoint == 0) +
-  labs(title = "Slurry")
+  labs(title = "Initial slurry") +
+  facet_wrap(~Year, drop = T) +
+  theme(strip.background = element_rect(color = "black"),
+        axis.title.x = element_blank())
 
 
 ## MS supl Fig taxonomy RNA ####
-MS_supl_plot_RNA <- plot_day0 + plot_birnessite.acetate + plot_acetate + 
-  plot_layout(guides = "collect", widths = c(1, 4, 4)) + 
+MS_supl_plot_RNA <- plot_birnessite.acetate + plot_acetate + plot_birnessite + plot_dic + plot_day0 + plot_spacer() +  
+  plot_layout(guides = "collect", nrow = 2,) + 
   plot_annotation(tag_levels = "A", title = "Bacterial community RNA level",
                   theme = theme(plot.title = element_text(size = 9, hjust = 0.5, face = "bold"))) &
   theme(legend.position = "bottom")
 
-ggsave("plots/MS_supl_FigSX_bac_barplot_RNA.jpg", plot = MS_supl_plot_RNA, width = 180, height = 140, units = "mm")
-ggsave("plots/MS_supl_FigSX_bac_barplot_RNA.pdf", plot = MS_supl_plot_RNA, width = 180, height = 140, units = "mm")
-ggsave("plots/MS_supl_FigSX_bac_barplot_RNA.emf", plot = MS_supl_plot_RNA, width = 180, height = 140, units = "mm",
+
+ggsave("plots/MS_supl_FigSX_bac_barplot_RNA.jpg", plot = MS_supl_plot_RNA, width = 180, height = 190, units = "mm")
+ggsave("plots/MS_supl_FigSX_bac_barplot_RNA.pdf", plot = MS_supl_plot_RNA, width = 180, height = 190, units = "mm")
+ggsave("plots/MS_supl_FigSX_bac_barplot_RNA.emf", plot = MS_supl_plot_RNA, width = 180, height = 190, units = "mm",
        device = {function(filename, ...) devEMF::emf(file = filename, ...)})
 
 
@@ -318,20 +277,29 @@ plot_D_birnessite.acetate <- plot_D_basic %+% subset(ta5s_D, ta5s_D$Substrate ==
 plot_D_acetate <- plot_D_basic %+% subset(ta5s_D, ta5s_D$Substrate == "acetate") +
   labs(title = "Acetate")
 
+plot_D_dic <- plot_D_basic %+% subset(ta5s_D, ta5s_D$Substrate == "DIC" & ta5s_D$Timepoint != 0) +
+  labs(title = "DIC (A+B: 2021; C: 2023)")
+
+plot_D_birnessite <- plot_D_basic %+% subset(ta5s_D, ta5s_D$Substrate == "birnessite" & ta5s_D$Timepoint != 0) +
+  labs(title = "Birnessite + DIC")
+
 plot_D_day0 <- plot_D_basic %+% subset(ta5s_D, ta5s_D$Timepoint == 0) +
-  labs(title = "Slurry")
+  labs(title = "Initial slurry") +
+  facet_wrap(~Year, drop = T) +
+  theme(strip.background = element_rect(color = "black"),
+        axis.title.x = element_blank())
 
 
 ## MS supl Fig taxonomy DNA ####
-MS_supl_plot_DNA <- plot_D_day0 + plot_D_birnessite.acetate + plot_D_acetate + 
-  plot_layout(guides = "collect") + 
+MS_supl_plot_DNA <- plot_D_birnessite.acetate + plot_D_acetate + plot_D_birnessite + plot_D_dic + plot_D_day0 + plot_spacer() + 
+  plot_layout(guides = "collect", nrow = 2) + 
   plot_annotation(tag_levels = "A", title = "Bacterial community DNA level",
                   theme = theme(plot.title = element_text(size = 9, hjust = 0.5, face = "bold"))) &
   theme(legend.position = "bottom")
 
-ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.jpg", plot = MS_supl_plot_DNA, width = 180, height = 140, units = "mm")
-ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.pdf", plot = MS_supl_plot_DNA, width = 180, height = 140, units = "mm")
-ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.emf", plot = MS_supl_plot_DNA, width = 180, height = 140, units = "mm",
+ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.jpg", plot = MS_supl_plot_DNA, width = 180, height = 190, units = "mm")
+ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.pdf", plot = MS_supl_plot_DNA, width = 180, height = 190, units = "mm")
+ggsave("plots/MS_supl_FigSX_bac_barplot_DNA.emf", plot = MS_supl_plot_DNA, width = 180, height = 190, units = "mm",
        device = {function(filename, ...) devEMF::emf(file = filename, ...)})
 
 
@@ -345,48 +313,48 @@ ta5n_MSFig03 <- ta5n %>%
   filter(Substrate %in% c("acetate", "birnessite.acetate", "DIC") &
            (Genus %in% c("Desulfuromonas", "Desulfuromusa") |
               (Family == "Arcobacteraceae" & is.na(Genus)) |
-              Family == "Sva1033") &
-           Timepoint != 30)
+              Family == "Sva1033"))
 
 ta5s_MSFig03 <- ta5n_MSFig03 %>% 
-  group_by(Sample, Genus_mod, Substrate, Replicate, Timepoint, NucleicAcid) %>% 
+  group_by(Sample, Genus_mod, Substrate, Replicate, Timepoint, NucleicAcid, Year) %>% 
   summarise(Abundance = sum(Abundance), .groups = "keep") %>% 
   ungroup() %>% 
   mutate(Genus_mod = factor(Genus_mod, levels = c("Desulfuromusa", "f_Sva1033", "Desulfuromonas", "f_Arcobacteraceae"),
                             labels = c("italic(Desulfuromusa)", "Sva1033", "italic(Desulfuromonas)", "italic(Arcobacteraceae)")))
 
-## add day 0 data for all treatments from DIC day 0 mean
+## add day 0 data for all treatments from DIC day 0 mean for 2021 treatments and birnessite day 0 to DIC 2023 treatment
 ta5s_MSFig03_d0 <- rbind(ta5s_MSFig03,
-                         ta5s_MSFig03 %>% filter(Substrate == "DIC" & Timepoint == 0) %>% mutate(Substrate = "acetate"),
-                         ta5s_MSFig03 %>% filter(Substrate == "DIC" & Timepoint == 0) %>% mutate(Substrate = "birnessite.acetate")) %>% 
-  filter(Substrate != "DIC")
+                         ta5s_MSFig03 %>% filter(Substrate == "DIC" & Timepoint == 0 & Year == "2021") %>% mutate(Substrate = "acetate"),
+                         ta5s_MSFig03 %>% filter(Substrate == "DIC" & Timepoint == 0 & Year == "2021") %>% mutate(Substrate = "birnessite.acetate"),
+                         ta5s_MSFig03 %>% filter(Substrate == "birnessite" & Timepoint == 0 & Year == "2023") %>% mutate(Substrate = "DIC"))
 
 ## calculate mean per treatment
 calc_sub_ta5s_MSFig03 <- ta5s_MSFig03_d0 %>% 
-  select(-Replicate) %>% 
+  select(-Replicate, -Year) %>% 
   group_by(Substrate, Timepoint, Genus_mod, NucleicAcid) %>% 
   summarise(mean = mean(Abundance), .groups = "keep")
 
 ## combine
 ta5s_MSFig03_wmean <- full_join(ta5s_MSFig03_d0, calc_sub_ta5s_MSFig03, relationship = "many-to-many") %>% 
-  mutate(Substrate = factor(Substrate, levels = c("birnessite.acetate", "acetate"),
-                            labels = c("Birnessite + acetate", "Acetate")))
+  mutate(Substrate = factor(Substrate, levels = c("birnessite.acetate", "birnessite", "acetate",  "DIC"),
+                            labels = c("Birnessite + acetate", "Birnessite + DIC", "Acetate", "DIC")))
 
 
-## plot ####
-man_col <- c("#ae017e", "#31688EFF")
-plot_Fig03 <- ggplot(ta5s_MSFig03_wmean, aes(x = Timepoint, color = Substrate, linetype = Substrate)) +
+## plot different scales ####
+man_col <- c("#ae017e", "#440154FF", "#31688EFF", "#8FD744FF")
+
+# base plot
+fig03_base <- ggplot(ta5s_MSFig03_wmean, aes(x = Timepoint, color = Substrate, linetype = Substrate)) +
   geom_line(aes(y = mean*100)) +
   geom_point(aes(y = Abundance*100, shape = Replicate), size = 1.5) +
-  scale_x_continuous(expand = c(0,0), breaks = c(0,2,6,10,14,20), limits = c(-0.1,21)) +
-  scale_y_continuous(expand = c(0,0), limits = c(-0.2,40.2)) +
+  scale_x_continuous(expand = c(0,0), breaks = c(0,5,10,15,20), limits = c(-0.1,21)) +
   scale_color_manual(values = man_col) +
-  scale_linetype_manual(values = c("solid", "22")) +
+  scale_linetype_manual(values = c("solid", "1343", "22", "13")) +
   scale_shape_discrete(na.translate = F) +
   facet_grid(NucleicAcid~Genus_mod, labeller = label_parsed) +
   labs(x = "Incubation time (days)", y = "Relative abundance (%)") +
   guides(shape = guide_legend(title.position = "left", order = 2), 
-         color = guide_legend(order = 1), linetype = guide_legend(order = 1)) +
+         color = guide_legend(order = 1, title = "Treatment"), linetype = guide_legend(order = 1, title = "Treatment")) +
   theme_bw(base_line_size = 1, base_rect_size = 1) +
   theme(text = element_text(size = 9, color = "black"), 
         axis.title =  element_text(size = 9),
@@ -398,11 +366,99 @@ plot_Fig03 <- ggplot(ta5s_MSFig03_wmean, aes(x = Timepoint, color = Substrate, l
         panel.spacing.y = unit(1, "lines"),
         legend.position = "bottom", legend.box.margin = margin(t = -10),
         legend.key.width = unit(0.8, "cm"))
+
+# subset plots for different scales
+fig3_desulfu <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromusa)") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.1,17), breaks = c(0,5,10,15)) +
+  theme(strip.text.y = element_blank())
+
+fig3_sva <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "Sva1033") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.1,17), breaks = c(0,5,10,15)) +
+  theme(strip.text.y = element_blank(), axis.title.y = element_blank())
+
+fig3_desulfo <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Desulfuromonas)") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.38,63)) +
+  theme(strip.text.y = element_blank(), axis.title.y = element_blank())
+
+fig3_arco <- fig03_base %+% subset(ta5s_MSFig03_wmean, ta5s_MSFig03_wmean$Genus_mod == "italic(Arcobacteraceae)") +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.38,63)) +
+  theme(axis.title.y = element_blank())
+
+
+# combine plots
+plot_Fig03 <- fig3_desulfu + fig3_sva + fig3_desulfo + fig3_arco +
+  plot_layout(nrow = 1, guides = "collect", axis_titles = "collect") &
+  theme(legend.position = "bottom", legend.box.margin = margin(t = -5),
+        legend.key.width = unit(0.8, "cm"),
+        legend.box = "vertical", 
+        legend.margin = margin(t = -0.5))
 plot_Fig03
+
 ggsave("plots/MS_Fig03_Inc_tax_new.jpg", plot_Fig03, width = 180, height = 105, units = "mm")
 ggsave("plots/MS_Fig03_Inc_tax_new.pdf", plot_Fig03, width = 180, height = 105, units = "mm")
 ggsave("plots/MS_Fig03_Inc_tax_new.emf", plot_Fig03, width = 180, height = 105, units = "mm", 
        device = {function(filename, ...) devEMF::emf(file = filename, ...)})
+
+
+# line plot like Fig03 distinguished between years for DIC control ####
+ta5s_MSFig03 <- ta5n_MSFig03 %>% 
+  group_by(Sample, Genus_mod, Substrate, Replicate, Timepoint, NucleicAcid, Year) %>% 
+  summarise(Abundance = sum(Abundance), .groups = "keep") %>% 
+  ungroup() %>% 
+  mutate(Genus_mod = factor(Genus_mod, levels = c("Desulfuromusa", "f_Sva1033", "Desulfuromonas", "f_Arcobacteraceae"),
+                            labels = c("italic(Desulfuromusa)", "Sva1033", "italic(Desulfuromonas)", "italic(Arcobacteraceae)")))
+
+ta5s_MSFigX_sepDIC <- ta5s_MSFig03 %>% 
+  mutate(Treatment_sep = case_when(Substrate == "DIC" & Year == "2021" ~ "DIC_2021",
+                                   Substrate == "DIC" & Year == "2023" ~ "DIC_2023",
+                                   Substrate != "DIC" ~ Substrate))
+
+## add day 0 data for all treatments from DIC day 0 mean for 2021 treatments and birnessite day 0 to DIC 2023 treatment
+ta5s_MSFigX_sepDIC_d0 <- rbind(ta5s_MSFigX_sepDIC,
+                               ta5s_MSFigX_sepDIC %>% filter(Treatment_sep == "DIC_2021" & Timepoint == 0) %>% mutate(Treatment_sep = "acetate"),
+                               ta5s_MSFigX_sepDIC %>% filter(Treatment_sep == "DIC_2021" & Timepoint == 0) %>% mutate(Treatment_sep = "birnessite.acetate"),
+                               ta5s_MSFigX_sepDIC %>% filter(Treatment_sep == "birnessite" & Timepoint == 0 & Year == "2023") %>% mutate(Treatment_sep = "DIC_2023"))
+
+## calculate mean per treatment
+calc_sub_ta5s_MSFigX_sepDIC <- ta5s_MSFigX_sepDIC_d0 %>% 
+  select(-Replicate, -Year) %>% 
+  group_by(Substrate, Timepoint, Genus_mod, NucleicAcid, Treatment_sep) %>% 
+  summarise(mean = mean(Abundance), .groups = "keep")
+
+## combine
+ta5s_MSFigX_sepDIC_wmean <- full_join(ta5s_MSFigX_sepDIC_d0, calc_sub_ta5s_MSFigX_sepDIC, relationship = "many-to-many") %>% 
+  mutate(Treatment_sep = factor(Treatment_sep, levels = c("birnessite.acetate", "birnessite", "acetate",  "DIC_2021", "DIC_2023"),
+                                labels = c("Birnessite + acetate", "Birnessite + DIC", "Acetate", "DIC_2021", "DIC_2023")))
+
+
+## plot ####
+man_col_sepDIC <- c("#ae017e", "#440154FF", "#31688EFF", "#8FD744FF", "#406f2aff")
+plot_sepDIC <- ggplot(ta5s_MSFigX_sepDIC_wmean, aes(x = Timepoint, color = Treatment_sep, linetype = Treatment_sep)) +
+  geom_line(aes(y = mean*100)) +
+  geom_point(aes(y = Abundance*100, shape = Replicate), size = 1.5) +
+  scale_x_continuous(expand = c(0,0), breaks = c(0,2,6,10,14,20), limits = c(-0.1,21)) +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.2,63)) +
+  scale_color_manual(values = man_col_sepDIC) +
+  scale_linetype_manual(values = c("solid", "1343", "22", "13", "13")) +
+  scale_shape_discrete(na.translate = F) +
+  facet_grid(NucleicAcid~Genus_mod, labeller = label_parsed) +
+  labs(x = "Incubation time (days)", y = "Relative abundance (%)") +
+  guides(shape = guide_legend(title.position = "left", order = 2), 
+         color = guide_legend(order = 1, title = "Treatment"), linetype = guide_legend(order = 1, title = "Treatment")) +
+  theme_bw(base_line_size = 1, base_rect_size = 1) +
+  theme(text = element_text(size = 9, color = "black"), 
+        axis.title =  element_text(size = 9),
+        axis.text = element_text(size = 9, color = "black"),
+        legend.text = element_text(size = 9), legend.title = element_text(size = 9),
+        axis.ticks = element_line(linewidth = 0.5),
+        panel.grid = element_blank(),
+        strip.background = element_blank(), strip.text = element_text(size = 9.5),
+        panel.spacing.y = unit(1, "lines"),
+        legend.position = "bottom", legend.box.margin = margin(t = -5),
+        legend.key.width = unit(0.8, "cm"),
+        legend.box = "vertical", legend.spacing.y = unit(0, "cm"), 
+        legend.margin = margin(t = -0.5, b = -0.5))
+plot_sepDIC
 
 
 # line plot supl MS sulfate reducers ####
@@ -417,11 +473,10 @@ ta5n_MSFigX_SR <- ta5n %>%
                          "Desulfofrigus", 
                          "Desulfoconvexum") |
               (Family == "Desulfobacteraceae" & is.na(Genus)) |
-              (Family == "Desulfocapsaceae" & is.na(Genus))) &
-           Timepoint != 30)
+              (Family == "Desulfocapsaceae" & is.na(Genus))))
 
 ta5s_MSFigX_SR <- ta5n_MSFigX_SR %>% 
-  group_by(Sample, Family, Genus, Substrate, Replicate, Timepoint, NucleicAcid) %>% 
+  group_by(Sample, Family, Genus, Substrate, Replicate, Timepoint, NucleicAcid, Year) %>% 
   summarise(Abundance = sum(Abundance), .groups = "keep") %>% 
   ungroup() %>% 
   mutate(Fam_Genus = factor(paste0(Family, "_", Genus),
@@ -436,9 +491,9 @@ ta5s_MSFigX_SR <- ta5n_MSFigX_SR %>%
 
 ## add day 0 data for all treatments from DIC day 0 mean
 ta5s_MSFigX_SR_d0 <- rbind(ta5s_MSFigX_SR,
-                           ta5s_MSFigX_SR %>% filter(Substrate == "DIC" & Timepoint == 0) %>% mutate(Substrate = "acetate"),
-                           ta5s_MSFigX_SR %>% filter(Substrate == "DIC" & Timepoint == 0) %>% mutate(Substrate = "birnessite.acetate")) %>% 
-  filter(Substrate != "DIC")
+                           ta5s_MSFigX_SR %>% filter(Treatment_sep == "DIC_2021" & Timepoint == 0) %>% mutate(Treatment_sep = "acetate"),
+                           ta5s_MSFigX_SR %>% filter(Treatment_sep == "DIC_2021" & Timepoint == 0) %>% mutate(Treatment_sep = "birnessite.acetate"),
+                           ta5s_MSFigX_SR %>% filter(Treatment_sep == "birnessite" & Timepoint == 0 & Year == "2023") %>% mutate(Treatment_sep = "DIC_2023"))
 
 
 ## calculate mean per treatment
@@ -449,24 +504,24 @@ calc_sub_ta5s_MSFigX_SR <- ta5s_MSFigX_SR_d0 %>%
 
 ## combine
 ta5s_MSFigX_SR_wmean <- full_join(ta5s_MSFigX_SR_d0, calc_sub_ta5s_MSFigX_SR, relationship = "many-to-many") %>% 
-  mutate(Substrate = factor(Substrate, levels = c("birnessite.acetate", "acetate"),
-                            labels = c("Birnessite + acetate", "Acetate")))
+  mutate(Treatment_sep = factor(Treatment_sep, levels = c("birnessite.acetate", "birnessite", "acetate",  "DIC_2021", "DIC_2023"),
+                                labels = c("Birnessite + acetate", "Birnessite + DIC", "Acetate", "DIC_2021", "DIC_2023")))
 
 
 ## plot ####
-man_col <- c("#ae017e", "#31688EFF")
-plot_MSFigX_SR <- ggplot(ta5s_MSFigX_SR_wmean, aes(x = Timepoint, color = Substrate, linetype = Substrate)) +
+man_col_sepDIC <- c("#ae017e", "#440154FF", "#31688EFF", "#8FD744FF", "#406f2aff")
+plot_MSFigX_SR <- ggplot(ta5s_MSFigX_SR_wmean, aes(x = Timepoint, color = Treatment_sep, linetype = Treatment_sep)) +
   geom_line(aes(y = mean*100)) +
-  geom_point(aes(y = Abundance*100, shape = Replicate), size = 1.5) +
+  geom_point(aes(y = Abundance*100, shape = Replicate), size = 1.1) +
   scale_x_continuous(expand = c(0,0), breaks = c(0,10,20), limits = c(-0.2,21)) +
-  scale_y_continuous(expand = c(0,0), limits = c(-0.2,19)) +
-  scale_color_manual(values = man_col) +
-  scale_linetype_manual(values = c("solid", "22")) +
+  scale_y_continuous(expand = c(0,0), limits = c(-0.2,22)) +
+  scale_color_manual(values = man_col_sepDIC) +
+  scale_linetype_manual(values = c("solid", "1343", "22", "13", "13")) +
   scale_shape_discrete(na.translate = F) +
   facet_grid(NucleicAcid~Fam_Genus) +
   labs(x = "Incubation time (days)", y = "Relative abundance (%)") +
   guides(shape = guide_legend(order = 2), 
-         color = guide_legend(order = 1), linetype = guide_legend(order = 1)) +
+         color = guide_legend(order = 1, title = "Treatment"), linetype = guide_legend(order = 1, title = "Treatment")) +
   theme_bw(base_line_size = 1, base_rect_size = 1) +
   theme(text = element_text(size = 8, color = "black"), 
         axis.title =  element_text(size = 8),
@@ -479,7 +534,7 @@ plot_MSFigX_SR <- ggplot(ta5s_MSFigX_SR_wmean, aes(x = Timepoint, color = Substr
         legend.position = "bottom", legend.box.margin = margin(t = -8),
         legend.key.width = unit(0.8, "cm"))
 plot_MSFigX_SR
-ggsave("plots/MS_suplFigX_Inc_tax_SR.jpg", plot_MSFigX_SR, width = 180, height = 80, units = "mm")
-ggsave("plots/MS_suplFigX_Inc_tax_SR.pdf", plot_MSFigX_SR, width = 180, height = 80, units = "mm")
-ggsave("plots/MS_suplFigX_Inc_tax_SR.emf", plot_MSFigX_SR, width = 180, height = 80, units = "mm", 
+ggsave("plots/MS_suplFigX_Inc_tax_SR.jpg", plot_MSFigX_SR, width = 180, height = 82, units = "mm")
+ggsave("plots/MS_suplFigX_Inc_tax_SR.pdf", plot_MSFigX_SR, width = 180, height = 82, units = "mm")
+ggsave("plots/MS_suplFigX_Inc_tax_SR.emf", plot_MSFigX_SR, width = 180, height = 82, units = "mm", 
        device = {function(filename, ...) devEMF::emf(file = filename, ...)})

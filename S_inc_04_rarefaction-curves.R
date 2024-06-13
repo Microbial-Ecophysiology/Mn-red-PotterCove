@@ -100,9 +100,17 @@ dfm <- left_join(df, mdata, by = c("Assemblage" = "Name.Mapping.File")) %>%
                            Substrate == "birnessite.acetate" & Timepoint == 20 ~ "Birnessite + acetate day 20",
                            Substrate == "acetate" & Timepoint == 6 ~ "Acetate day 6",
                            Substrate == "acetate" & Timepoint == 10 ~ "Acetate day 10",
-                           Substrate == "acetate" & Timepoint == 20 ~ "Acetate day 20")) %>% 
+                           Substrate == "acetate" & Timepoint == 20 ~ "Acetate day 20",
+                           Substrate == "birnessite" & Timepoint == 6 ~ "Birnessite + DIC day 6",
+                           Substrate == "birnessite" & Timepoint == 10 ~ "Birnessite + DIC day 10",
+                           Substrate == "birnessite" & Timepoint == 20 ~ "Birnessite + DIC day 20",
+                           Substrate == "DIC" & Timepoint == 6 ~ "DIC day 6",
+                           Substrate == "DIC" & Timepoint == 10 ~ "DIC day 10",
+                           Substrate == "DIC" & Timepoint == 20 ~ "DIC day 20")) %>% 
   mutate(Label = factor(Label, levels = c("Slurry day 0", "Birnessite + acetate day 6", "Birnessite + acetate day 10", "Birnessite + acetate day 20",
-                                          "Acetate day 6", "Acetate day 10", "Acetate day 20")))
+                                          "Birnessite + DIC day 6", "Birnessite + DIC day 10", "Birnessite + DIC day 20", 
+                                          "Acetate day 6", "Acetate day 10", "Acetate day 20",
+                                          "DIC day 6", "DIC day 10", "DIC day 20")))
 
 
 ## MS supl fig rarefaction curves
@@ -115,7 +123,7 @@ figx <- ggplot(dfm, aes(x = x, y = y, color = Label, shape = Replicate)) +
   scale_y_continuous(expand = c(0.025,0), limits = c(0,NA)) +
   labs(x = "Number of individuals", y = "Species diversity", linetype = "Method",
        title = NULL) +
-  guides(color = guide_legend(title = NULL, nrow = 3), shape = guide_legend(nrow = 3)) +
+  guides(color = guide_legend(title = NULL, ncol = 3), shape = guide_legend(ncol = 1)) +
   facet_grid(Order.q~NucleicAcid, scales = "free_y") +
   theme_bw(base_line_size = 1, base_rect_size = 1) +
   theme(text = element_text(size = 10, color = "black"), 

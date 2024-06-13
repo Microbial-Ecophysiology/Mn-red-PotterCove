@@ -43,7 +43,7 @@ fig2 <- ggplot(Mn_MS, aes(x = Day, color = Treatment, linetype = Treatment)) +
   geom_point(aes(y = Mn.uM, shape = Replicate), size = 1.5) +
   scale_colour_manual(values = man_col) +
   scale_linetype_manual(values = c("solid", "42", "44",  "1343", "22", "13")) +
-  scale_x_continuous(expand = c(0.01,0.2), breaks = c(0,2,6,10,14,20)) +
+  scale_x_continuous(expand = c(0.01,0.2), breaks = c(0,5,10,15,20)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 630)) +
   labs(x = "Incubation time (days)", y = "Dissolved Mn (µM)") +
   guides(color = guide_legend(ncol = 1, title.position = "top"), shape = guide_legend(ncol = 1, title.position = "top")) +
