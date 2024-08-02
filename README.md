@@ -1,6 +1,6 @@
 # Manganese reduction in Potter Cove sediments
 ## Scripts used to analyse sequence raw data, subsequent analyses and plotting
-As supplemental to manuscript Wunder, L. et al. 2024: Manganese reduction in microbial communities involved in Antarctic surface sediments from Potter Cove (submitted)
+As supplemental to manuscript [Wunder, L. et al. 2024: Manganese reduction in microbial communities involved in Antarctic surface sediments from Potter Cove](https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2024.1398021/full) [doi:10.3389/fmicb.2024.1398021](https://doi.org/10.3389/fmicb.2024.1398021)
 
 ## Amplicon sequence data analysis - workflow
 Involves all scripts starting with `S_` and some scripts which are sourced during this analysis in folder [Scripts to source](Scripts_to_source). \
