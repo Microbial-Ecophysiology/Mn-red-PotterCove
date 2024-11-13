@@ -29,8 +29,12 @@ Files with some metadata needed to run the scripts can be found here for [in sit
 
 
 ## Geochemical data
-Calculate solid phase Mn wt% data into µmol/cm^3 and plot it in this [script](Monien-2014-data_plot.R). 
+Calculate solid phase Mn wt% data into µmol/cm<sup>3</sup> and plot it in this [script](Monien-2014-data_plot.R). 
 
 Plot geochemical in situ data with this [script](insitu_geochemistry_plot.R). The data is also uploaded to PANGAEA [here](https://doi.org/10.1594/PANGAEA.941109). 
 
 Plot and do statistical analysis on geochemical data measured during incubation experiment with this [script](inc_geochemistry_plot.R) uploaded [here](small_data/Inc/Inc_geochem_data.txt).
+
+<br/><br/>
+---
+This project was funded by the DFG-Schwerpunktprogramm - Antarktisforschung ([SPP 1158](https://www.spp-antarktisforschung.uni-rostock.de/))
